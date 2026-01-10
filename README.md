@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PennyTracer - Expense Tracker
+
+A modern, beautiful expense tracking application built with Next.js and Appwrite. Track your expenses, revenue, and gain insights into your financial habits.
+
+![Dashboard Overview](/home/ryan-bioumla/.gemini/antigravity/brain/400d4ee4-d96e-4a06-938d-09b882cfb95f/dashboard_verification_1768065258389.png)
+
+## Features
+
+- **User Authentication** - Secure sign up and login with Appwrite
+- **Dashboard Overview** - View total expenses, revenue, and net difference at a glance
+- **Interactive Charts** - Visualize spending patterns with daily/weekly expense vs revenue charts
+- **Category Insights** - See your top expense and revenue categories
+- **Transaction Management** - Add, edit, and delete expense and revenue entries
+- **Custom Categories** - Create personalized categories with icons
+- **Period Filtering** - Filter data by custom date ranges
+- **Responsive Design** - Works beautifully on desktop and mobile
+
+## Tech Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Styling**: Tailwind CSS 4
+- **Backend**: Appwrite (Auth, Database)
+- **UI Components**: Shadcn UI, Lucide Icons
+
+## Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- [Appwrite](https://appwrite.io/) account (free tier available)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd expense-tracker-dash
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up Appwrite
+
+1. Create a new project in your [Appwrite Console](https://cloud.appwrite.io/)
+2. Create a new database
+3. Create the following collections:
+
+#### Categories Collection
+| Attribute | Type | Required |
+|-----------|------|----------|
+| name | string | Yes |
+| type | string | Yes (values: "expense" or "revenu") |
+| icon | string | Yes (lucide icon name, e.g., "wallet", "car") |
+| userId | string | Yes |
+
+#### Expenses Collection
+| Attribute | Type | Required |
+|-----------|------|----------|
+| description | string | Yes |
+| amount | number | Yes |
+| categoryId | string | Yes |
+| userId | string | Yes |
+
+#### Revenue Collection
+| Attribute | Type | Required |
+|-----------|------|----------|
+| description | string | Yes |
+| amount | number | Yes |
+| categoryId | string | Yes |
+| userId | string | Yes |
+
+4. Set up collection permissions (Document Security enabled, allow users to CRUD their own documents)
+
+### 4. Configure environment variables
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in your Appwrite credentials:
+
+```env
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_DATABASE_ID=your-database-id
+NEXT_PUBLIC_EXPENSE_ID=your-expenses-collection-id
+NEXT_PUBLIC_REVENUE_ID=your-revenue-collection-id
+NEXT_PUBLIC_CATEGORY_ID=your-categories-collection-id
+```
+
+### 5. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── app/                  # Next.js app router pages
+│   ├── dashboard/        # Dashboard and manage pages
+│   ├── login/            # Authentication page
+│   └── page.tsx          # Landing page
+├── components/           # Reusable React components
+│   ├── ui/               # Base UI components (shadcn/ui)
+│   └── ...               # Feature components
+├── hooks/                # Custom React hooks
+│   ├── useAuth.ts        # Authentication hook
+│   ├── useTransaction.ts # Transaction CRUD operations
+│   ├── useCategory.ts    # Category management
+│   └── ...
+├── lib/                  # Utility functions
+│   └── appwrite.ts       # Appwrite client configuration
+└── public/               # Static assets
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+### Deploy on Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push your code to GitHub
+2. Import the project on [Vercel](https://vercel.com)
+3. Add your environment variables in the Vercel dashboard
+4. Deploy!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Other platforms
 
-## Deploy on Vercel
+The app can be deployed on any platform that supports Next.js:
+- Netlify
+- Railway
+- Self-hosted with `npm run build && npm start`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT License - feel free to use this project for personal or commercial purposes.
