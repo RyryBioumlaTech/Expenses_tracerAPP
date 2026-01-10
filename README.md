@@ -2,8 +2,6 @@
 
 A modern, beautiful expense tracking application built with Next.js and Appwrite. Track your expenses, revenue, and gain insights into your financial habits.
 
-![Dashboard Overview](/home/ryan-bioumla/.gemini/antigravity/brain/400d4ee4-d96e-4a06-938d-09b882cfb95f/dashboard_verification_1768065258389.png)
-
 ## Features
 
 - **User Authentication** - Secure sign up and login with Appwrite
@@ -33,7 +31,7 @@ A modern, beautiful expense tracking application built with Next.js and Appwrite
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/RyryBioumlaTech/Expenses_tracerAPP
 cd expense-tracker-dash
 ```
 
