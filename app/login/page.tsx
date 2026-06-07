@@ -11,30 +11,42 @@ export default function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        // Le event.preventDefault() est déjà fait dans le composant AuthForm,
+        // mais on récupère bien la cible pour le FormData
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
 
+        // Si login échoue, la méthode "login" de useAuth doit lever (throw) une erreur
+        // pour qu'elle soit attrapée par le try/catch de AuthForm.
         await login(
             formData.get('email') as string,
             formData.get('password') as string
         );
 
+        // On réinitialise le formulaire UNIQUEMENT si la connexion a réussi
         form.reset();
     };
 
     const handleRegistration = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
 
-        if (formData.get('confirm_password') as string === formData.get('password'))
-            await register(
-                formData.get('name') as string,
-                formData.get('email') as string,
-                formData.get('password') as string
-            );
+        const password = formData.get('password') as string;
+        const confirmPassword = formData.get('confirm_password') as string;
 
+        // 1. On lève explicitement une erreur si les mots de passe ne correspondent pas
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match. Please try again.");
+        }
+
+        // 2. Si ça correspond, on lance l'inscription
+        await register(
+            formData.get('name') as string,
+            formData.get('email') as string,
+            password
+        );
+
+        // On réinitialise uniquement si l'inscription a réussi
         form.reset();
     };
 
