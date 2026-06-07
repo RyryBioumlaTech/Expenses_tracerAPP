@@ -7,18 +7,22 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({ handleSubmit, submitType }: AuthFormProps) {
-    // 1. Déclaration de l'état de chargement
     const [isLoading, setIsLoading] = useState(false);
+    // 1. Déclaration de l'état d'erreur
+    const [error, setError] = useState<string | null>(null);
 
-    // 2. Fonction intermédiaire pour gérer l'état pendant la soumission
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Empêche le rechargement de la page si ce n'est pas fait dans handleSubmit
+        event.preventDefault();
         setIsLoading(true);
+        setError(null); // 2. On réinitialise l'erreur à chaque nouvelle tentative
         
         try {
             await handleSubmit(event);
+        } catch (err: any) {
+            // 3. On capture l'erreur si la promesse de handleSubmit échoue
+            // Ajustez "err.message" selon la structure d'erreur renvoyée par votre backend
+            setError(err.message || "Une erreur inattendue est survenue. Veuillez réessayer.");
         } finally {
-            // S'exécute que la promesse soit résolue ou rejetée
             setIsLoading(false);
         }
     };
@@ -26,7 +30,7 @@ export default function AuthForm({ handleSubmit, submitType }: AuthFormProps) {
     return (
         <form
             className="w-full flex flex-col gap-4"
-            onSubmit={handleSubmit} // Utilisation de la nouvelle fonction
+            onSubmit={onSubmit}
         >
             <div className="flex flex-col gap-3">
                 {
@@ -79,13 +83,19 @@ export default function AuthForm({ handleSubmit, submitType }: AuthFormProps) {
                 }
             </div>
 
+            {/* 4. Affichage conditionnel de la boîte d'erreur */}
+            {error && (
+                <div className="p-3 text-sm font-medium text-red-400 bg-red-950/50 border border-red-900/50 rounded-lg text-center animate-in fade-in slide-in-from-top-2">
+                    {error}
+                </div>
+            )}
+
             <Button
                 type="submit"
-                disabled={isLoading} // 3. Désactive le bouton pendant le chargement
+                disabled={isLoading}
                 aria-label={submitType}
                 className="w-full py-5 mt-1 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold rounded-lg transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:pointer-events-none"
             >
-                {/* 4. Affichage conditionnel du SVG de chargement */}
                 {isLoading && (
                     <svg 
                         className="animate-spin h-5 w-5 text-slate-900" 
