@@ -26,7 +26,7 @@ export default function AuthForm({ handleSubmit, submitType }: AuthFormProps) {
     return (
         <form
             className="w-full flex flex-col gap-4"
-            onSubmit={onSubmit} // Utilisation de la nouvelle fonction
+            onSubmit={handleSubmit} // Utilisation de la nouvelle fonction
         >
             <div className="flex flex-col gap-3">
                 {
